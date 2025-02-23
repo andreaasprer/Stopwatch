@@ -15,34 +15,33 @@ module counter(
 	output reg [3:0] seconds_ones
 );
 	
-	// Get constants
 	`include "stopwatch_constants.v"
 	
-	// Handle pause state
+	// check pause state
 	reg is_paused = 0;
 	
+	// clock selector
 	sel_adj adjust(.adj(adj), .clk_1hz(clk_1hz), .clk_2hz(clk_2hz), .which_clk(clk));
 	
 	always @(posedge pause) begin
-		// Pause the clock
+		// set pause state
 		is_paused = ~is_paused;
 	end
 	
-	// Fast clock increase
 	always @(posedge clk or posedge rst) begin
 		if (rst) begin
-			// Reset clock
+			// reset values
 			minutes_tens <= 0;
 			minutes_ones <= 0;
 			seconds_tens <= 0;
 			seconds_ones <= 0;
+		// adjustment mode
 		end else if (adj && ~is_paused) begin
-			// Make the minutes update faster
 			if (~sel) begin
-				// Update 1s place
+				// minutes ones place
 				if (minutes_ones == MAX_ONES) begin
 					minutes_ones <= 0;
-					// Update 10s place
+					// minutes tens place
 					if (minutes_tens == MAX_TENS) begin
 						minutes_tens <= 0;
 					end else begin
@@ -51,12 +50,11 @@ module counter(
 				end else begin
 					minutes_ones <= minutes_ones + 1'b1;
 				end
-			// Make the seconds update faster
 			end else begin
-				// Update 1s place
+				// seconds ones place
 				if (seconds_ones == MAX_ONES) begin
 					seconds_ones <= 0;
-					// Update 10s place
+					// seconds tens place
 					if (seconds_tens == MAX_TENS) begin
 						seconds_tens <= 0;
 					end else begin
@@ -66,18 +64,18 @@ module counter(
 					seconds_ones <= seconds_ones + 1'b1;
 				end
 			end
-		// Regular clock
+		// Normal mode
 		end else if (~adj && ~is_paused) begin
-			// Update seconds (1s place)
+			// seconds ones
 			if (seconds_ones == MAX_ONES) begin
 				seconds_ones <= 0;
-				// Update seconds (10s place)
+				// seconds tens
 				if (seconds_tens == MAX_TENS) begin
 					seconds_tens <= 0;
-					// Update minutes (1s place)
+					// minutes ones
 					if (minutes_ones == MAX_ONES) begin
 						minutes_ones <= 0;
-						// Update minutes (10s place)
+						// minutes tens
 						if (minutes_tens == MAX_TENS) begin
 							minutes_tens <= 0;
 						end else begin

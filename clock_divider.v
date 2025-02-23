@@ -12,7 +12,6 @@ module clock_divider(
     output reg clk_blink
 );
 
-    // use constant definitions
     `include "stopwatch_constants.v"
 
     // counters for the clocks

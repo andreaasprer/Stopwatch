@@ -2,18 +2,17 @@
 
 module stopwatch_tb;
 
-	// Inputs
+	// INPUTS
 	reg clk;
 	reg SEL;
 	reg ADJ;
 	reg RESET;
 	reg PAUSE;
 
-	// Outputs
+	// OUTPUTS
 	wire [6:0] cathode;
 	wire [3:0] anode;
 
-	// Instantiate the Unit Under Test (UUT)
 	stopwatch uut (
 		.clk(clk), 
 		.SEL(SEL), 
@@ -25,7 +24,7 @@ module stopwatch_tb;
 	);
 	
 	// Global clock
-	always #5 clk = ~clk;
+	always #2.5 clk = ~clk;
 
 	initial begin
 		// Initialize Inputs
@@ -35,131 +34,64 @@ module stopwatch_tb;
 		RESET = 0;
 		PAUSE = 0;
 
-		// Wait 100 ns for global reset to finish
+        // Reset stopwatch to 00:00		
 		#100;
-        
-		// Reset
 		RESET = 1;
-		// Wait 1ms for the debouncer to allow the signal through
+        // Test debouncer
 		#1100000;
 		RESET = 0;
 		#1100000;
 		
 		$display("Reset complete, beginning stopwatch");
 		
-		// Test one second default
 		#500000000;
 		
-		$display("-------------------------------------------");
-		$display("Normal mode test complete\nResults:");
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
+		$display("Normal mode finished\n");
 		
-		// Test ADJ, SEL = 0
+		// Test adjustment minutes mode
 		ADJ = 1;
 		#1100000;
 		#500000000;
 		
-		$display("-------------------------------------------");
-		$display("Minute adjustment mode test complete\nResults:");
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
+		$display("Adjustment minute mode finished\n");
 		
-		// Test ADJ, SEL = 1
+		// Test Adjustment Seconds mode
 		SEL = 1;
 		#1100000;
 		#500000000;
 		
-		$display("-------------------------------------------");
-		$display("Second adjustment mode test complete\nResults:");
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
+		$display("Adjustment seconds mode finished\n");
 		
-		// Test ADJ = 0
+	   // resume normal mode
 		ADJ = 0;
 		#1100000;
 		#1000000000;
 		
-		$display("-------------------------------------------");
-		$display("ADJ off mode test complete\nResults:");
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
+		$display("Turn off adjustment mode finished");
 		
-		// Test PAUSE
+		// Pause test
 		PAUSE = 1;
 		#1100000;
 		#100000000;
 		PAUSE = 0;
 		#1100000;
 		
-		$display("-------------------------------------------");
-		$display("Pause test complete\nResults:");
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
+		$display("Pause test finished\n");
 		
-		// Test Unpause
+		// Unpause test
 		PAUSE = 1;
 		#1100000;
 		#100000000;
 		PAUSE = 0;
 		#1100000;
 		
-		$display("-------------------------------------------");
-		$display("Unpause test complete\nResults:");
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
+		$display("Unpause test finished");
 		
-		// Test RESET
+		// reset test
 		RESET = 1;
 		#1100000;
 		
-		$display("-------------------------------------------");
-		$display("Reset test complete\nResults:");
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-		$display("%b: %b", anode, cathode);
-		#4000000;
-
+		$display("Reset test finished");
 	end
       
 endmodule

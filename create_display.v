@@ -15,7 +15,6 @@ module create_display(
 	output  [3:0] anode
 );
 
-    // Get constants
     `include "stopwatch_constants.v"
 
 	// temporaries
@@ -33,7 +32,7 @@ module create_display(
 					cathode_temp <= minutes_tens_cathode;
 			end
 			else begin
-				cathode_temp <= ST_OFF;
+				cathode_temp <= OFF;
 			end
 		end
 		// dont change minutes
@@ -50,7 +49,7 @@ module create_display(
 				cathode_temp <= minutes_ones_cathode;
 			end
 			else begin
-				cathode_temp <= ST_OFF;
+				cathode_temp <= OFF;
 			end
 		end
 		else begin
@@ -60,16 +59,16 @@ module create_display(
 	else if (switch == 2) begin
 		switch <= switch + 2'b1;
 		anode_temp <= 4'b1101;
-			// Adjust seconds (10's spot)
+			// seconds
 			if (adj && sel) begin
 				if (clk_blink) begin
 					cathode_temp <= seconds_tens_cathode;
 				end
 				else begin
-					cathode_temp <= ST_OFF;
+					cathode_temp <= OFF;
 				end
 			end
-			// If not Adjust Clock Mode, or adjusting minutes, seconds don't change
+			// not Adjust Clock Mode, or adjusting minutes, seconds don't change
 			else begin
 				cathode_temp <= seconds_tens_cathode;
 			end
@@ -77,16 +76,16 @@ module create_display(
 		else if (switch == 3) begin
 			switch <= 2'b0;
 			anode_temp <= 4'b1110;
-			// Adjust seconds (1's spot)
+			// adjust ones seconds
 			if (adj && sel) begin
 				if (clk_blink) begin
 					cathode_temp <= seconds_ones_cathode;
 				end
 				else begin
-					cathode_temp <= ST_OFF;
+					cathode_temp <= OFF;
 				end
 			end
-			// If not Adjust Clock Mode, or adjusting minutes, seconds don't change
+			// not Adjust Clock Mode, or adjusting minutes, seconds don't change
 			else begin
 				cathode_temp <= seconds_ones_cathode;
 			end
